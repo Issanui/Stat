@@ -81,7 +81,6 @@ section.main > div {
 </style>
 """, unsafe_allow_html=True)
 
-st.title("📊 Dashboard Combiné avec Stockage Permanent et Interface Esthétique")
 
 # Fichiers pour le stockage permanent
 FILE_APP1 = "data_app1.csv"
@@ -111,7 +110,7 @@ def save_data_app2(new_data):
     combined.to_csv(FILE_APP2, index=False)
 
 # Section App1
-st.header("📊 Partie 1 : Load Factor Moyen (Radar Chart)")
+st.header("📊 Partie 1 : Load Factor Moyen ")
 
 uploaded_file_app1 = st.file_uploader("📂 Charger un fichier CSV pour la Partie 1", type=["csv", "txt"], key="app1_upload")
 
@@ -180,7 +179,7 @@ else:
     st.info("📭 Aucune donnée disponible pour la Partie 1. Veuillez charger un fichier.")
 
 # Section App2
-st.header("📊 Partie 2 : Analyse de la Part de Classe par Mois avec Accumulation")
+st.header("📊 Partie 2 :  Part de vente par  Classe ")
 
 uploaded_file_app2 = st.file_uploader("📁 Téléversez un fichier CSV pour la Partie 2", type="csv", key="app2_upload")
 
@@ -228,6 +227,9 @@ if not df_app2.empty:
     grouped['Part class'] = (grouped['Total Ss Count'] / grouped['Total Mois']) * 100
     grouped['Part class'] = grouped['Part class'].round(2)
 
+    # Trier les données
+    grouped = grouped.sort_values(by=['Annee', 'Mois', 'Part class'], ascending=[True, True, False])
+
     # Affichage tableau
     st.subheader("🧾 Tableau cumulatif de la Part de Classe (%)")
     st.dataframe(grouped[['Annee', 'Mois', 'Rez Class', 'Part class']].rename(columns={'Part class': 'Part (%)'}))
@@ -239,9 +241,9 @@ if not df_app2.empty:
         return output.getvalue()
 
     st.download_button(
-        label="📥 Télécharger les données cumulées de la Partie 2",
+        label="📥 Télécharger ",
         data=convert_df(grouped),
-        file_name="part_class_cumulee.csv",
+        file_name="part_class_cumulee_triee.csv",
         mime='text/csv',
     )
 else:
